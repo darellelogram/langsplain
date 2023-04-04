@@ -138,7 +138,7 @@ def lime_with_model_save_image_all(input, model_type, labels, explainer, model):
         exp = explainer.explain_instance(text,
                                          classifier_fn = pass_entity(entity, model, model_type),
                                          labels=(label,),
-                                         num_samples=20,
+                                         num_samples=200,
                                          )
         storage.append(exp)
     return storage
@@ -194,12 +194,12 @@ def zip_files(file_name, model_type, num_entries):
     zip_file = zipfile.ZipFile(file_name + "_{}_outputs.zip".format(model_type), "w")
 
     if model_type == 'Stance':
-        if type(model) == BertForSequenceClassification:
+        if type(model) == ClassificationModel:
             labels = ['Favour', 'Neutral', 'Against']
         else:
             labels = ['Against', 'Favour', 'Neutral']
     elif model_type == 'Emotion':
-        if type(model) == BertForSequenceClassification:
+        if type(model) == ClassificationModel:
             labels = ['Sadness', 'Surprise', 'Anger', 'Disgust', 'Neutral', 'Fear', 'Happy']
         else:
             labels = ["Anger", "Disgust", "Fear", "Happy", "Neutral", "Sadness", "Surprise" ]
@@ -228,14 +228,14 @@ def create_results(model_type, model, csv_file_name, progress_placeholder):
     '''
 
     if model_type == 'Stance':
-        if type(model):
+        if type(model) == ClassificationModel:
             headers = ['Text', 'Named entity', 'Favour probability','Neutral probability', 'Against probability', 'Prediction']
             class_names = ['Favour','Neutral', 'Against']
         else:
             headers = ['Text', 'Named entity', 'Against probability','Favour probability', 'Neutral probability', 'Prediction']
             class_names = ['Against','Favour', 'Neutral']
     elif model_type == 'Emotion':
-        if type(model) == BertForSequenceClassification:
+        if type(model) == ClassificationModel:
             headers = ['Text', 'Named entity', "Sadness probability", "Surprise probability", "Anger probability",
                     "Disgust probability", "Neutral probability", "Fear probability", "Happy probability", 'Prediction']
             class_names = ["Sadness", "Surprise", "Anger", "Disgust", "Neutral", "Fear", "Happy" ]
@@ -681,7 +681,7 @@ def create_results_malay(model_type, model, csv_file_name, progress_placeholder)
 
 def pyplot_lime(file_name, text, class_names, probas, model_type, index):
     st.subheader("Graphical Prediction Probabilities for Data Entry {} [File: {}]".format(index+1, file_name))
-    fig, ax = plt.subplots(figsize=(10, 5), dpi=600)
+    fig, ax = plt.subplots(figsize=(10, 2), dpi=600)
     x = class_names
     y = probas[0]
     mapping_emo = {'Sadness': 'skyblue', 'Surprise': 'orange', 'Anger': 'red', 'Disgust': 'green', 'Neutral': 'grey', 
@@ -716,7 +716,7 @@ def pyplot_lime(file_name, text, class_names, probas, model_type, index):
 
 def pyplot_chinese_stance(file_name, text, class_names, probas, model_type, index):
     st.subheader("Graphical Prediction Probabilities for Data Entry {} [File: {}]".format(index+1, file_name))
-    fig, ax = plt.subplots(figsize=(10, 5), dpi=600)
+    fig, ax = plt.subplots(figsize=(10, 2), dpi=600)
     x = class_names
     y = probas[0]
     bars = ax.bar(x, y, color = ["skyblue", "pink"])
