@@ -1,0 +1,14 @@
+html2image==2.0.3
+lime==0.2.0.1
+new==1.0
+numpy==1.24.2
+pandas==1.5.3
+scipy==1.10.1
+selenium==4.8.3
+simpletransformers==0.63.9
+spacy==3.5.1
+streamlit==1.20.0
+torch==1.13.1
+tqdm==4.65.0
+transformers==4.26.0
+webdriver_manager==3.8.5
